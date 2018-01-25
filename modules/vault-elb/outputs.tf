@@ -2,6 +2,10 @@ output "load_balancer_name" {
   value = "${aws_elb.vault.name}"
 }
 
+output "load_balancer_arn" {
+  value = "${aws_elb.vault.arn}"
+}
+
 output "load_balancer_dns_name" {
   value = "${aws_elb.vault.dns_name}"
 }
