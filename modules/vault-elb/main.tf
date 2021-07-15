@@ -37,17 +37,20 @@ resource "aws_elb" "vault" {
   }
 
   # Run the ELB in TCP passthrough mode
-  listener = [{
-    lb_port           = var.lb_port
-    lb_protocol       = "TCP"
-    instance_port     = var.vault_api_port
-    instance_protocol = "TCP"
-  }, {
+  listener = [
+    {
+      lb_port           = var.lb_port
+      lb_protocol       = "TCP"
+      instance_port     = var.vault_api_port
+      instance_protocol = "TCP"
+    },
+    {
       instance_port = 8201
       instance_protocol = "TCP"
       lb_port = 8201
       lb_protocol = "TCP"
-    }]
+    },
+  ]
 
   health_check {
     target              = "${var.health_check_protocol}:${var.health_check_port == 0 ? var.vault_api_port : var.health_check_port}${var.health_check_path}"
