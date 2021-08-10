@@ -24,7 +24,7 @@ resource "aws_elb" "vault" {
   security_groups = [aws_security_group.vault.id]
   subnets         = var.subnet_ids
 
-  # optional access_logs creation  
+  # optional access_logs creation
   dynamic "access_logs" {
     for_each = var.access_logs == null ? [] : ["once"]
 
@@ -37,15 +37,19 @@ resource "aws_elb" "vault" {
   }
 
   # Run the ELB in TCP passthrough mode
-  listener {
-    lb_port           = var.lb_port
-    lb_protocol       = "TCP"
-    instance_port     = var.vault_api_port
-    instance_protocol = "TCP"
+  dynamic "listener" {
+    for_each = toset(var.lb_listeners)
+
+    content {
+      lb_port           = listener.value["lb_port"]
+      lb_protocol       = "TCP"
+      instance_port     = listener.value["vault_api_port"]
+      instance_protocol = "TCP"
+    }
   }
 
   health_check {
-    target              = "${var.health_check_protocol}:${var.health_check_port == 0 ? var.vault_api_port : var.health_check_port}${var.health_check_path}"
+    target              = "${var.health_check_protocol}:${var.health_check_port == 0 ? var.lb_healthcheck_vault_api_port : var.health_check_port}${var.health_check_path}"
     interval            = var.health_check_interval
     healthy_threshold   = var.health_check_healthy_threshold
     unhealthy_threshold = var.health_check_unhealthy_threshold
@@ -82,9 +86,10 @@ resource "aws_security_group" "vault" {
 }
 
 resource "aws_security_group_rule" "allow_inbound_api" {
+  count       = length(var.lb_listeners)
   type        = "ingress"
-  from_port   = var.lb_port
-  to_port     = var.lb_port
+  from_port   = lookup(var.lb_listeners[count.index], "lb_port")
+  to_port     = lookup(var.lb_listeners[count.index], "lb_port")
   protocol    = "tcp"
   cidr_blocks = var.allowed_inbound_cidr_blocks
 

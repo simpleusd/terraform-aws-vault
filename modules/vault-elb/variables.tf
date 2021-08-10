@@ -60,13 +60,19 @@ variable "domain_name" {
   default     = "replace-me"
 }
 
-variable "lb_port" {
-  description = "The port the load balancer should listen on for API requests."
-  default     = 443
+variable "lb_listeners" {
+  description = "The ports that load balancer and vault listen on for API requests."
+  type        = list(map(string))
+  default = [
+    {
+      lb_port        = 443  # load balancer port
+      vault_api_port = 8200 # vault instance port
+    },
+  ]
 }
 
-variable "vault_api_port" {
-  description = "The port to listen on for API requests."
+variable "lb_healthcheck_vault_api_port" {
+  description = "Vault API port used for load-balancer healthcheck"
   default     = 8200
 }
 
