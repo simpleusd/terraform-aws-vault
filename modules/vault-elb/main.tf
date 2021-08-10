@@ -45,7 +45,7 @@ resource "aws_elb" "vault" {
   # }
 
   dynamic "listener" {
-    for_each = var.lb_ports
+    for_each = toset(var.lb_ports)
 
     content {
       lb_port = listener.key
