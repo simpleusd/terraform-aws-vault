@@ -76,6 +76,11 @@ variable "lb_listeners" {
   ]
 }
 
+variable "lb_healthcheck_vault_api_port" {
+  description = "Vault API port used for load-balancer healthcheck"
+  default = 8200
+}
+
 # variable "vault_api_port" {
 #   description = "The port to listen on for API requests."
 #   default     = 8200

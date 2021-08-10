@@ -56,7 +56,7 @@ resource "aws_elb" "vault" {
   }
 
   health_check {
-    target              = "${var.health_check_protocol}:${var.health_check_port == 0 ? var.vault_api_port : var.health_check_port}${var.health_check_path}"
+    target              = "${var.health_check_protocol}:${var.health_check_port == 0 ? var.lb_healthcheck_vault_api_port : var.health_check_port}${var.health_check_path}"
     interval            = var.health_check_interval
     healthy_threshold   = var.health_check_healthy_threshold
     unhealthy_threshold = var.health_check_unhealthy_threshold
