@@ -37,13 +37,6 @@ resource "aws_elb" "vault" {
   }
 
   # Run the ELB in TCP passthrough mode
-  # listener {
-  #   lb_port           = var.lb_port
-  #   lb_protocol       = "TCP"
-  #   instance_port     = var.vault_api_port
-  #   instance_protocol = "TCP"
-  # }
-
   dynamic "listener" {
     for_each = toset(var.lb_listeners)
 

@@ -60,11 +60,6 @@ variable "domain_name" {
   default     = "replace-me"
 }
 
-# variable "lb_port" {
-#   description = "The port the load balancer should listen on for API requests."
-#   default     = 443
-# }
-
 variable "lb_listeners" {
   description = "The ports that load balancer and vault listen on for API requests."
   type        = list(map(string))
@@ -80,11 +75,6 @@ variable "lb_healthcheck_vault_api_port" {
   description = "Vault API port used for load-balancer healthcheck"
   default     = 8200
 }
-
-# variable "vault_api_port" {
-#   description = "The port to listen on for API requests."
-#   default     = 8200
-# }
 
 variable "internal" {
   description = "If set to true, this will be an internal ELB, accessible only within the VPC. The main reason to use an ELB with Vault is to make it publicly accessible, so this should typically be set to false."
