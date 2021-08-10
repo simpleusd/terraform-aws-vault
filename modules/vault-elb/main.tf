@@ -93,9 +93,10 @@ resource "aws_security_group" "vault" {
 }
 
 resource "aws_security_group_rule" "allow_inbound_api" {
+  count = length(var.lb_ports)
   type        = "ingress"
-  from_port   = var.lb_port
-  to_port     = var.lb_port
+  from_port   = var.lb_ports[count.index]
+  to_port     = var.lb_ports[count.index]
   protocol    = "tcp"
   cidr_blocks = var.allowed_inbound_cidr_blocks
 
