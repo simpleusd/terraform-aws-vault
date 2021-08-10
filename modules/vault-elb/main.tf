@@ -45,12 +45,12 @@ resource "aws_elb" "vault" {
   # }
 
   dynamic "listener" {
-    for_each = toset(var.lb_ports)
+    for_each = toset(var.lb_listeners)
 
     content {
-      lb_port = listener.key
-      lb_protocol = "TCP"
-      instance_port = listener.key
+      lb_port           = listener.value["lb_port"]
+      lb_protocol       = "TCP"
+      instance_port     = listener.value["vault_api_port"]
       instance_protocol = "TCP"
     }
   }
@@ -93,10 +93,10 @@ resource "aws_security_group" "vault" {
 }
 
 resource "aws_security_group_rule" "allow_inbound_api" {
-  count = length(var.lb_ports)
+  count       = length(var.lb_listeners)
   type        = "ingress"
-  from_port   = var.lb_ports[count.index]
-  to_port     = var.lb_ports[count.index]
+  from_port   = lookup(var.lb_listeners[count.index], "lb_port")
+  to_port     = lookup(var.lb_listeners[count.index], "lb_port")
   protocol    = "tcp"
   cidr_blocks = var.allowed_inbound_cidr_blocks
 
