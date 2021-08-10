@@ -67,10 +67,10 @@ variable "domain_name" {
 
 variable "lb_listeners" {
   description = "The ports that load balancer and vault listen on for API requests."
-  type = list(map(string))
+  type        = list(map(string))
   default = [
     {
-      lb_port = 443 # load balancer port
+      lb_port        = 443  # load balancer port
       vault_api_port = 8200 # vault instance port
     },
   ]
@@ -78,7 +78,7 @@ variable "lb_listeners" {
 
 variable "lb_healthcheck_vault_api_port" {
   description = "Vault API port used for load-balancer healthcheck"
-  default = 8200
+  default     = 8200
 }
 
 # variable "vault_api_port" {
