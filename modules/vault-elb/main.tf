@@ -48,9 +48,9 @@ resource "aws_elb" "vault" {
     for_each = var.lb_ports
 
     content {
-      lb_port = lb_ports.key
+      lb_port = listener.key
       lb_protocol = "TCP"
-      instance_port = lb_ports.key
+      instance_port = listener.key
       instance_protocol = "TCP"
     }
   }
